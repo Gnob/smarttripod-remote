@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">SmartTripod</string>
+    <string name="bt_uuid">9a8260aa-d262-4f65-93b3-ce5a2d1f709a</string>
+    <string name="bt_not_supported">This phone is not supported Bluetooth...</string>
+    <string name="bt_request_enable">블루투스를 활성화 해주세요.</string>
+    <string name="bt_no_devices">There are no devices</string>
+    <string name="bt_start_discover">Discovering...</string>
+    <string name="bt_stop_discover">Stopped discovering</string>
+    <string name="bt_accept_thd_error">IOException occurred in AcceptThread.</string>
+    <string name="bt_accept_thd_accept_error">IOException occurred while accepting in AcceptThread.</string>
+    <string name="bt_accept_thd_cancel_error">IOException occurred while canceling in AcceptThread.</string>
+    <string name="bt_connect_thd_error">IOException occurred in ConnectThread.</string>
+    <string name="bt_connect_thd_connect_error">IOException occurred while connecting in ConnectThread.</string>
+    <string name="bt_connect_thd_cancel_error">IOException occurred while closing in ConnectThread.</string>
+</resources>
