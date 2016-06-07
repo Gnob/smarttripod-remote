@@ -118,7 +118,8 @@
         android:ems="10"
         android:id="@+id/timerTxt"
         android:layout_alignBottom="@+id/timerBtn"
-        android:layout_toStartOf="@+id/timerBtn"/>
+        android:layout_toStartOf="@+id/timerBtn"
+        android:text="0"/>
 
     <Button
         android:layout_width="wrap_content"

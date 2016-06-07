@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
+                // Start Server Activity
                 startActivityOnView(ServerActivity.class);
             }
         });
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
+                // Start Client Activity
                 startActivityOnView(ClientActivity.class);
             }
         });
