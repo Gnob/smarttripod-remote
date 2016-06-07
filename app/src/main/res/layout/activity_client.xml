@@ -16,8 +16,8 @@
         android:id="@+id/upBtn"
         android:textSize="24sp"
         android:layout_marginBottom="50dp"
-        android:layout_above="@+id/takeBtn"
-        android:layout_alignStart="@+id/takeBtn" />
+        android:layout_above="@+id/shotBtn"
+        android:layout_alignStart="@+id/shotBtn" />
 
     <Button
         android:layout_width="wrap_content"
@@ -26,7 +26,7 @@
         android:id="@+id/downBtn"
         android:textSize="24sp"
         android:layout_marginTop="50dp"
-        android:layout_below="@+id/takeBtn"
+        android:layout_below="@+id/shotBtn"
         android:layout_centerHorizontal="true" />
 
     <Button
@@ -44,14 +44,14 @@
         android:text="→"
         android:id="@+id/rightBtn"
         android:textSize="24sp"
-        android:layout_alignTop="@+id/takeBtn"
+        android:layout_alignTop="@+id/shotBtn"
         android:layout_alignParentEnd="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Take"
-        android:id="@+id/takeBtn"
+        android:text="Shot"
+        android:id="@+id/shotBtn"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
@@ -61,7 +61,7 @@
         android:text="Auto"
         android:id="@+id/autoBtn"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignStart="@+id/rightBtn"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -86,5 +86,46 @@
         android:id="@+id/objStatTxt"
         android:layout_below="@+id/btStatTxt"
         android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="❩"
+        android:id="@+id/rightRotateBtn"
+        android:layout_above="@+id/rightBtn"
+        android:layout_toEndOf="@+id/upBtn"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/leftRotateBtn"
+        android:text="❨"
+        android:layout_above="@+id/leftBtn"
+        android:layout_toStartOf="@+id/upBtn"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Set timer"
+        android:id="@+id/timerBtn"
+        android:layout_alignTop="@+id/autoBtn"
+        android:layout_toEndOf="@+id/leftBtn"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/timerTxt"
+        android:layout_alignBottom="@+id/timerBtn"
+        android:layout_toStartOf="@+id/timerBtn"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PANORAMA"
+        android:id="@+id/panoramaBtn"
+        android:layout_above="@+id/autoBtn"
+        android:layout_alignEnd="@+id/autoBtn"/>
 
 </RelativeLayout>

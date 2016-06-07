@@ -10,8 +10,10 @@ import android.os.ParcelUuid;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.bluetooth.*;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +26,9 @@ import java.util.UUID;
 
 public class ClientActivity extends AppCompatActivity {
     private TextView btStat, objStat;
-    private Button upBtn, downBtn, leftBtn, rightBtn, connectBtn, takeBtn, autoBtn;
+    private Button upBtn, downBtn, leftBtn, rightBtn, connectBtn, shotBtn, autoBtn,
+            leftRotateBtn, rightRotateBtn, timerBtn, panoramaBtn;
+    private EditText timerTxt;
     private final int REQUEST_ENABLE_BT = 4;
     private BluetoothAdapter mBlAdapter;
     private ArrayList<BluetoothDevice> discoveredDevices = new ArrayList<>();
@@ -51,8 +55,14 @@ public class ClientActivity extends AppCompatActivity {
                 if (discoveredDevices.size() == 1)
                     objStat.setText(device.getName() + " / " + device.getAddress());
 
-                if (device.getName().equals("Galaxy Note3"))
+                if (device.getName() != null && device.getName().equals("Smart Tripod"))
                 {
+                    mBlAdapter.cancelDiscovery();
+                    initConnect(device);
+                }
+                else if (device.getName() == null && device.getAddress().equals("00:01:95:20:12:4A"))
+                {
+                    mBlAdapter.cancelDiscovery();
                     if (mConnectThread != null)
                     {
                         mConnectThread.cancel();
@@ -61,11 +71,26 @@ public class ClientActivity extends AppCompatActivity {
                     mConnectThread = new ConnectThread(device);
                     mConnectThread.start();
 
-                    mBlAdapter.cancelDiscovery();
+                    btStat.setText("Try Connect");
+
                 }
             }
         }
     };
+
+    private void initConnect(BluetoothDevice device)
+    {
+        if (mConnectThread != null)
+        {
+            mConnectThread.cancel();
+            mConnectThread = null;
+        }
+
+        btStat.setText("Try Connect");
+
+        mConnectThread = new ConnectThread(device);
+        mConnectThread.start();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -163,9 +188,15 @@ public class ClientActivity extends AppCompatActivity {
         downBtn = (Button) findViewById(R.id.downBtn);
         leftBtn = (Button) findViewById(R.id.leftBtn);
         rightBtn = (Button) findViewById(R.id.rightBtn);
+        leftRotateBtn = (Button) findViewById(R.id.leftRotateBtn);
+        rightRotateBtn = (Button) findViewById(R.id.rightRotateBtn);
         connectBtn = (Button) findViewById(R.id.serverBtn);
-        takeBtn = (Button) findViewById(R.id.takeBtn);
+        shotBtn = (Button) findViewById(R.id.shotBtn);
         autoBtn = (Button) findViewById(R.id.autoBtn);
+        timerBtn = (Button) findViewById(R.id.timerBtn);
+        panoramaBtn = (Button) findViewById(R.id.panoramaBtn);
+
+        timerTxt = (EditText) findViewById(R.id.timerTxt);
     }
 
     private void bindEvents()
@@ -179,12 +210,17 @@ public class ClientActivity extends AppCompatActivity {
             }
         });
 
-        takeBtn.setOnClickListener(new View.OnClickListener()
+        shotBtn.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                if(mBlAdapter.isDiscovering())
+                if (mConnectedThread != null)
+                {
+                    byte data = 'S';
+                    mConnectedThread.write(data);
+                }
+                else if(mBlAdapter.isDiscovering())
                 {
                     mBlAdapter.cancelDiscovery();
                     btStat.setText(R.string.bt_stop_discover);
@@ -197,7 +233,12 @@ public class ClientActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                if (discoveredDeviceCurIdx > 0)
+                if (mConnectedThread != null)
+                {
+                    byte data = 'U';
+                    mConnectedThread.write(data);
+                }
+                else if (discoveredDeviceCurIdx > 0)
                 {
                     discoveredDeviceCurIdx--;
                     BluetoothDevice device = discoveredDevices.get(discoveredDeviceCurIdx);
@@ -211,11 +252,121 @@ public class ClientActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                if (discoveredDeviceCurIdx < discoveredDevices.size() - 1)
+                if (mConnectedThread != null)
+                {
+                    byte data = 'D';
+                    mConnectedThread.write(data);
+                }
+                else if (discoveredDeviceCurIdx < discoveredDevices.size() - 1)
                 {
                     discoveredDeviceCurIdx++;
                     BluetoothDevice device = discoveredDevices.get(discoveredDeviceCurIdx);
                     objStat.setText(device.getName() + " / " + device.getAddress());
+                }
+            }
+        });
+
+        leftBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if (mConnectedThread != null)
+                {
+                    byte data = 'L';
+                    mConnectedThread.write(data);
+                }
+            }
+        });
+
+        rightBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if (mConnectedThread != null)
+                {
+                    byte data = 'R';
+                    mConnectedThread.write(data);
+                }
+            }
+        });
+
+        leftRotateBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if (mConnectedThread != null)
+                {
+                    byte data = 'F';
+                    mConnectedThread.write(data);
+                }
+            }
+        });
+
+        rightRotateBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if (mConnectedThread != null)
+                {
+                    byte data = 'B';
+                    mConnectedThread.write(data);
+                }
+            }
+        });
+
+        autoBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if (mConnectedThread != null)
+                {
+                    byte data = 'A';
+                    mConnectedThread.write(data);
+                }
+            }
+        });
+
+        timerBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if (mConnectedThread != null)
+                {
+                    String timerStr = timerTxt.getText().toString();
+                    if (timerStr.length() <= 2)
+                    {
+                        byte data = 'T';
+                        mConnectedThread.write(data);
+
+                        char timerValue = (char) Integer.parseInt(timerStr);
+
+                        data = (byte) timerValue;
+                        mConnectedThread.write(data);
+                        toast("Timer value send");
+                    }
+                    else
+                    {
+                        toast("Invalid timer value (1~99 seconds only)");
+                    }
+                }
+            }
+        });
+
+        panoramaBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if (mConnectedThread != null)
+                {
+                    byte data = 'P';
+                    mConnectedThread.write(data);
                 }
             }
         });
@@ -226,6 +377,8 @@ public class ClientActivity extends AppCompatActivity {
     {
         super.onDestroy();
         unregisterReceiver(mReceiver);
+        if (mConnectedThread != null)
+            mConnectedThread.cancel();
     }
 
     private void toast(String msg)
@@ -239,11 +392,14 @@ public class ClientActivity extends AppCompatActivity {
 
         public ConnectThread(BluetoothDevice device)
         {
-            UUID btUUID = UUID.fromString(getString(R.string.bt_uuid));
+            UUID btUUID = UUID.fromString(getString(R.string.bt_other_uuid));
+            Log.d("SmartTripod", "Connect Thread Start");
+            btStat.setText("Try Connect - thread phase #1");
             mmSocket = null;
             try
             {
                 mmSocket = device.createRfcommSocketToServiceRecord(btUUID);
+//                mmSocket = device.createInsecureRfcommSocketToServiceRecord(btUUID);
             } catch (IOException e)
             {
                 Toast.makeText(getApplicationContext(), getString(R.string.bt_connect_thd_error), Toast.LENGTH_SHORT).show();
@@ -259,7 +415,7 @@ public class ClientActivity extends AppCompatActivity {
                 manageConnection(mmSocket);
             } catch (IOException e)
             {
-                Toast.makeText(getApplicationContext(), getString(R.string.bt_connect_thd_connect_error), Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getApplicationContext(), getString(R.string.bt_connect_thd_connect_error), Toast.LENGTH_SHORT).show();
                 cancel();
                 return;
             }
@@ -307,6 +463,8 @@ public class ClientActivity extends AppCompatActivity {
 
         mConnectedThread = new ConnectedThread(socket);
         mConnectedThread.start();
+
+        // btStat.setText("Connected");
     }
 
     private class ConnectedThread extends Thread
@@ -340,27 +498,41 @@ public class ClientActivity extends AppCompatActivity {
             byte[] buffer = new byte[128];
             int n;
 
+            byte data = 'B';
+
             while (true)
             {
-                try
-                {
-                    n = mmInStream.read(buffer);
-
-                    mHandler.obtainMessage(MESSAGE_READ, n, -1, buffer)
-                            .sendToTarget();
-                } catch (IOException e)
-                {
-                    Toast.makeText(getApplicationContext(), "Fail to read while running in Connected Thread.", Toast.LENGTH_SHORT).show();
-                    break;
-                }
+//                try
+//                {
+//                    write(data++);
+//                    this.sleep(3000);
+//                }
+//                catch (InterruptedException e)
+//                {
+//
+//                }
             }
+//            while (true)
+//            {
+//                try
+//                {
+//                    n = mmInStream.read(buffer);
+//
+//                    mHandler.obtainMessage(MESSAGE_READ, n, -1, buffer)
+//                            .sendToTarget();
+//                } catch (IOException e)
+//                {
+//                    Toast.makeText(getApplicationContext(), "Fail to read while running in Connected Thread.", Toast.LENGTH_SHORT).show();
+//                    break;
+//                }
+//            }
         }
 
-        public void write(byte[] bytes)
+        public void write(byte data)
         {
             try
             {
-                mmOutStream.write(bytes);
+                mmOutStream.write(data);
             } catch (IOException e)
             {
                 Toast.makeText(getApplicationContext(), "Fail to write while writing in Connected Thread.", Toast.LENGTH_SHORT).show();

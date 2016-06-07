@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">SmartTripod</string>
     <string name="bt_uuid">9a8260aa-d262-4f65-93b3-ce5a2d1f709a</string>
+    <string name="bt_other_uuid">00001101-0000-1000-8000-00805F9B34FB</string>
     <string name="bt_not_supported">This phone is not supported Bluetooth...</string>
     <string name="bt_request_enable">블루투스를 활성화 해주세요.</string>
     <string name="bt_no_devices">There are no devices</string>

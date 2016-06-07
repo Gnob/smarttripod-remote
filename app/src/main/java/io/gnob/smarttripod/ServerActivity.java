@@ -28,6 +28,7 @@ import java.util.UUID;
 
 public class ServerActivity extends AppCompatActivity {
     private TextView btStat;
+    private Button testBtn;
 
     private final int REQUEST_DISCOVERABLE_BT = 5;
     private BluetoothAdapter mBlAdapter;
@@ -91,10 +92,23 @@ public class ServerActivity extends AppCompatActivity {
     private void loadViewComponents()
     {
         btStat = (TextView) findViewById(R.id.btStatTxt);
+        testBtn = (Button) findViewById(R.id.testBtn);
     }
 
     private void bindEvents()
     {
+        testBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if (mConnectedThread != null)
+                {
+                    byte data = 4;
+                    mConnectedThread.write(data);
+                }
+            }
+        });
     }
 
     private void manageConnection(BluetoothSocket socket)
@@ -215,11 +229,11 @@ public class ServerActivity extends AppCompatActivity {
             }
         }
 
-        public void write(byte[] bytes)
+        public void write(byte data)
         {
             try
             {
-                mmOutStream.write(bytes);
+                mmOutStream.write(data);
             } catch (IOException e)
             {
                 Toast.makeText(getApplicationContext(), "Fail to write while writing in Connected Thread.", Toast.LENGTH_SHORT).show();
